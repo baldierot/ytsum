@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YouTube Video Summarizer</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/x-icon" href="icon_512.png" />
     <style>
       * {
         margin: 0;
@@ -287,13 +289,13 @@
   </head>
   <body>
     <div class="container">
-      <header>
+      <!-- <header>
         <div class="logo">📹➡️📝</div>
         <h1>YouTube Video Summarizer</h1>
         <p class="description">
           Enter a YouTube video link to get an AI-generated summary
         </p>
-      </header>
+      </header> -->
 
       <main>
         <div class="input-group">
@@ -316,7 +318,11 @@
 
           <div class="api-key-container">
             <label for="api-key">API Key:</label>
-            <input type="password" id="api-key" placeholder="Enter your API key" />
+            <input
+              type="password"
+              id="api-key"
+              placeholder="Enter your API key"
+            />
           </div>
         </div>
 
@@ -361,10 +367,25 @@
         summarizeButton.addEventListener("click", summarizeVideo);
 
         copyButton.addEventListener("click", copySummaryToClipboard);
+
+        apiKeyInput.addEventListener("input", () => {
+          localStorage.setItem("key", apiKeyInput.value);
+        });
+
+        longSummaryCheckbox.addEventListener("change", () => {
+          localStorage.setItem("long", longSummaryCheckbox.checked);
+        });
       });
+
+      longSummaryCheckbox.checked = localStorage.getItem("long") === "true" ?? false;
+      videoUrlInput.value = localStorage.getItem("url") ?? "";
+      apiKeyInput.value = localStorage.getItem("key") ?? "";
+      validateYouTubeUrl();
+      displaySummary(localStorage.getItem("summary") ?? "");
 
       function validateYouTubeUrl() {
         const url = videoUrlInput.value.trim();
+        localStorage.setItem("url", url);
         const youtubeRegex =
           /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 
@@ -440,6 +461,7 @@
           })
           .then((data) => {
             displaySummary(data);
+            localStorage.setItem("summary", data)
           })
           .catch((error) => {
             displayError(
@@ -452,10 +474,10 @@
         loader.style.display = "none";
 
         summaryOutput.textContent = summary;
-        summaryOutput.style.display = "block";
         summaryOutput.style.color = "#000000";
-
-        copyButton.style.display = "block";
+        
+        summaryOutput.style.display = summary ? "block" : "none";
+        copyButton.style.display = summary ? "block" : "none";
       }
 
       function displayError(message) {

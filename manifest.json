@@ -1,0 +1,13 @@
+{
+    "name": "YTSum",
+    "icons": [
+      {
+        "src": "icon_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "index.html",
+    "display": "standalone"
+  }
+  
