@@ -90,7 +90,6 @@
         font-weight: normal;
       }
 
-      /* Add to CSS section */
       .checkbox-group {
         display: flex;
         align-items: center;
@@ -115,15 +114,30 @@
         padding: 8px 12px;
       }
 
+      /* Add this new style for the checkbox and its label as a group */
+      .checkbox-with-label {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-with-label label {
+        margin: 0 0 0 10px;
+        font-weight: normal;
+      }
+
       @media (max-width: 600px) {
         .checkbox-group {
           flex-direction: column;
           align-items: flex-start;
+          gap: 15px;
+        }
+
+        .checkbox-with-label {
+          width: 100%;
         }
 
         .api-key-container {
           width: 100%;
-          margin-top: 10px;
         }
 
         .api-key-container input {
@@ -304,8 +318,10 @@
         </div>
 
         <div class="checkbox-group">
-          <input type="checkbox" id="long-summary" />
-          <label for="long-summary">Generate detailed summary</label>
+          <div class="checkbox-with-label">
+            <input type="checkbox" id="long-summary" />
+            <label for="long-summary">Generate detailed summary</label>
+          </div>
 
           <div class="api-key-container">
             <label for="api-key">API Key:</label>
@@ -432,28 +448,38 @@
         // simulateApiCall(apiUrl);
 
         fetch(apiUrl)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               // Handle HTTP error status codes
               if (response.status === 400) {
-                throw new Error("Bad request: Please check your YouTube URL and API key");
+                throw new Error(
+                  "Bad request: Please check your YouTube URL and API key"
+                );
               } else if (response.status === 401 || response.status === 403) {
                 throw new Error("Authentication error: Invalid API key");
               } else if (response.status === 404) {
-                throw new Error("Video not found: The requested video could not be found");
+                throw new Error(
+                  "Video not found: The requested video could not be found"
+                );
               } else if (response.status >= 500) {
-                throw new Error("Server error: Our service is experiencing issues. Please try again later");
+                throw new Error(
+                  "Server error: Our service is experiencing issues. Please try again later"
+                );
               } else {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+                throw new Error(
+                  `Error ${response.status}: ${response.statusText}`
+                );
               }
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             displaySummary(data);
           })
-          .catch(error => {
-            displayError(error.message || "Failed to get summary. Please try again.");
+          .catch((error) => {
+            displayError(
+              error.message || "Failed to get summary. Please try again."
+            );
           });
       }
 
