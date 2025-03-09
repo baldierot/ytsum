@@ -368,7 +368,7 @@
       function validateYouTubeUrl() {
         const url = videoUrlInput.value.trim();
         const youtubeRegex =
-          /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(\S*)?$/;
+          /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 
         const isValid = youtubeRegex.test(url);
 
