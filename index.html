@@ -85,15 +85,50 @@
             display: none;
         }
 
+        .checkbox-group label {
+            margin: 0 0 0 10px;
+            font-weight: normal;
+        }
+
+        /* Add to CSS section */
         .checkbox-group {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .checkbox-group label {
-            margin: 0 0 0 10px;
-            font-weight: normal;
+        .api-key-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .api-key-container label {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .api-key-container input {
+            width: 200px;
+            padding: 8px 12px;
+        }
+
+        @media (max-width: 600px) {
+            .checkbox-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .api-key-container {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .api-key-container input {
+                flex-grow: 1;
+            }
         }
 
         /* Button Styles */
@@ -251,6 +286,11 @@
             <div class="checkbox-group">
                 <input type="checkbox" id="long-summary">
                 <label for="long-summary">Generate detailed summary</label>
+                
+                <div class="api-key-container">
+                    <label for="api-key">API Key:</label>
+                    <input type="text" id="api-key" placeholder="Enter your API key">
+                </div>
             </div>
 
             <div class="button-group">
@@ -278,6 +318,7 @@
         const urlError = document.getElementById('url-error');
         const loader = document.getElementById('loader');
         const summaryOutput = document.getElementById('summary-output');
+        const apiKeyInput = document.getElementById('api-key');
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
@@ -333,6 +374,14 @@
                 return;
             }
 
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) {
+                // Show error for API key
+                displayError("Please enter an API key");
+                apiKeyInput.focus();
+                return;
+            }
+
             // Show loading state
             loader.style.display = 'block';
             summaryOutput.style.display = 'none';
@@ -343,7 +392,7 @@
             const isLongSummary = longSummaryCheckbox.checked;
             
             // Construct API URL (replace with your actual API endpoint)
-            let apiUrl = `https://your-api-endpoint.com/summarize?url=${videoUrl}`;
+            let apiUrl = `https://ytsum.baldierot.workers.dev/?url=${videoUrl}&key=${apiKey}`;
             if (isLongSummary) {
                 apiUrl += '&long=true';
             }
