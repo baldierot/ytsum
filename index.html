@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YouTube Video Summarizer</title>
     <style>
-      /* Reset and Base Styles */
       * {
         margin: 0;
         padding: 0;
@@ -20,7 +19,6 @@
         line-height: 1.6;
       }
 
-      /* Container Styles */
       .container {
         max-width: 800px;
         margin: 0 auto;
@@ -30,7 +28,6 @@
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       }
 
-      /* Header Styles */
       header {
         text-align: center;
         margin-bottom: 30px;
@@ -53,7 +50,6 @@
         margin-bottom: 20px;
       }
 
-      /* Form Styles */
       .input-group {
         margin-bottom: 20px;
       }
@@ -114,7 +110,6 @@
         padding: 8px 12px;
       }
 
-      /* Add this new style for the checkbox and its label as a group */
       .checkbox-with-label {
         display: flex;
         align-items: center;
@@ -145,7 +140,6 @@
         }
       }
 
-      /* Button Styles */
       .button-group {
         display: flex;
         gap: 10px;
@@ -196,7 +190,6 @@
         display: none;
       }
 
-      /* Output Styles */
       .output-section {
         margin-top: 30px;
       }
@@ -211,7 +204,6 @@
         white-space: pre-wrap;
       }
 
-      /* Loading Indicator */
       .loader {
         display: none;
         text-align: center;
@@ -282,7 +274,6 @@
         }
       }
 
-      /* Responsive Adjustments */
       @media (max-width: 768px) {
         .container {
           padding: 20px;
@@ -355,7 +346,6 @@
     </div>
 
     <script>
-      // DOM Elements
       const videoUrlInput = document.getElementById("video-url");
       const longSummaryCheckbox = document.getElementById("long-summary");
       const summarizeButton = document.getElementById("summarize-btn");
@@ -365,22 +355,14 @@
       const summaryOutput = document.getElementById("summary-output");
       const apiKeyInput = document.getElementById("api-key");
 
-      // Event Listeners
       document.addEventListener("DOMContentLoaded", () => {
-        // URL validation on input
         videoUrlInput.addEventListener("input", validateYouTubeUrl);
 
-        // Summarize button click handler
         summarizeButton.addEventListener("click", summarizeVideo);
 
-        // Copy button click handler
         copyButton.addEventListener("click", copySummaryToClipboard);
       });
 
-      /**
-       * Validates if the input is a YouTube URL
-       * Shows/hides error message accordingly
-       */
       function validateYouTubeUrl() {
         const url = videoUrlInput.value.trim();
         const youtubeRegex =
@@ -402,15 +384,7 @@
         }
       }
 
-      /**
-       * Handles the summarization process
-       * - Validates URL
-       * - Shows loading state
-       * - Makes API request
-       * - Updates UI with result
-       */
       function summarizeVideo() {
-        // Validate URL first
         if (!validateYouTubeUrl()) {
           if (videoUrlInput.value.trim() === "") {
             urlError.textContent = "Please enter a YouTube URL";
@@ -422,35 +396,26 @@
 
         const apiKey = apiKeyInput.value.trim();
         if (!apiKey) {
-          // Show error for API key
           displayError("Please enter an API key");
           apiKeyInput.focus();
           return;
         }
 
-        // Show loading state
         loader.style.display = "block";
         summaryOutput.style.display = "none";
         copyButton.style.display = "none";
 
-        // Get input values
         const videoUrl = encodeURIComponent(videoUrlInput.value.trim());
         const isLongSummary = longSummaryCheckbox.checked;
 
-        // Construct API URL (replace with your actual API endpoint)
         let apiUrl = `https://ytsum.baldierot.workers.dev/?url=${videoUrl}&key=${apiKey}`;
         if (isLongSummary) {
           apiUrl += "&long=true";
         }
 
-        // For demo purposes, simulate API call with a timeout
-        // In a real application, replace this with actual fetch request
-        // simulateApiCall(apiUrl);
-
         fetch(apiUrl)
           .then((response) => {
             if (!response.ok) {
-              // Handle HTTP error status codes
               if (response.status === 400) {
                 throw new Error(
                   "Bad request: Please check your YouTube URL and API key"
@@ -483,44 +448,16 @@
           });
       }
 
-      /**
-       * Simulates an API call (for demo purposes)
-       * In a real application, replace with an actual fetch request
-       * @param {string} apiUrl - The API URL to call
-       */
-      function simulateApiCall(apiUrl) {
-        console.log(`Making API request to: ${apiUrl}`);
-
-        // Simulate network delay
-        setTimeout(() => {
-          // For demo, simulate a successful response
-          const simulatedSummary =
-            "This is a simulated summary of the YouTube video. In a real application, this would be replaced with the actual summary returned from your API. The summary would contain key points from the video, main topics discussed, and important takeaways based on the video content.\n\nThe summarization process typically involves analyzing the video transcript, identifying important sections, and condensing the information into a concise format that retains the essential meaning.\n\nThis is just a placeholder to demonstrate the UI functionality.";
-          displaySummary(simulatedSummary);
-        }, 2000);
-      }
-
-      /**
-       * Displays the summary in the output container
-       * @param {string} summary - The summary text to display
-       */
       function displaySummary(summary) {
-        // Hide loader
         loader.style.display = "none";
 
-        // Update and show summary container
         summaryOutput.textContent = summary;
         summaryOutput.style.display = "block";
         summaryOutput.style.color = "#000000";
 
-        // Show copy button
         copyButton.style.display = "block";
       }
 
-      /**
-       * Displays an error message in the summary container
-       * @param {string} message - The error message to display
-       */
       function displayError(message) {
         loader.style.display = "none";
         summaryOutput.textContent = message;
@@ -528,9 +465,6 @@
         summaryOutput.style.color = "#ff0000";
       }
 
-      /**
-       * Copies the summary text to clipboard
-       */
       function copySummaryToClipboard() {
         const summaryText = summaryOutput.textContent;
 
@@ -539,7 +473,6 @@
         navigator.clipboard
           .writeText(summaryText)
           .then(() => {
-            // Temporarily change button text to indicate success
             const originalText = copyButton.textContent;
             copyButton.textContent = "Copied!";
 
