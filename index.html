@@ -1,482 +1,529 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YouTube Video Summarizer</title>
     <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-        body {
-            background-color: #f9f9f9;
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
-        }
+      body {
+        background-color: #f9f9f9;
+        color: #333;
+        padding: 20px;
+        line-height: 1.6;
+      }
 
-        /* Container Styles */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+      /* Container Styles */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        /* Header Styles */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+      /* Header Styles */
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
 
-        h1 {
-            color: #ff0000;
-            margin-bottom: 10px;
-            font-size: 2.2rem;
-        }
+      h1 {
+        color: #ff0000;
+        margin-bottom: 10px;
+        font-size: 2.2rem;
+      }
 
-        .logo {
-            color: #ff0000;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+      .logo {
+        color: #ff0000;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
 
-        .description {
-            color: #666;
-            margin-bottom: 20px;
-        }
+      .description {
+        color: #666;
+        margin-bottom: 20px;
+      }
 
-        /* Form Styles */
-        .input-group {
-            margin-bottom: 20px;
-        }
+      /* Form Styles */
+      .input-group {
+        margin-bottom: 20px;
+      }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #ff0000;
-        }
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #ff0000;
+      }
 
-        .error-message {
-            color: #ff0000;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none;
-        }
+      .error-message {
+        color: #ff0000;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+      }
 
-        .checkbox-group label {
-            margin: 0 0 0 10px;
-            font-weight: normal;
-        }
+      .checkbox-group label {
+        margin: 0 0 0 10px;
+        font-weight: normal;
+      }
 
-        /* Add to CSS section */
+      /* Add to CSS section */
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .api-key-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .api-key-container label {
+        margin: 0;
+        white-space: nowrap;
+      }
+
+      .api-key-container input {
+        width: 200px;
+        padding: 8px 12px;
+      }
+
+      @media (max-width: 600px) {
         .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 20px;
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .api-key-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .api-key-container label {
-            margin: 0;
-            white-space: nowrap;
+          width: 100%;
+          margin-top: 10px;
         }
 
         .api-key-container input {
-            width: 200px;
-            padding: 8px 12px;
+          flex-grow: 1;
         }
+      }
 
-        @media (max-width: 600px) {
-            .checkbox-group {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .api-key-container {
-                width: 100%;
-                margin-top: 10px;
-            }
-            
-            .api-key-container input {
-                flex-grow: 1;
-            }
-        }
+      /* Button Styles */
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
 
-        /* Button Styles */
+      @media (max-width: 600px) {
         .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+          flex-direction: column;
+        }
+      }
+
+      button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+
+      button:active {
+        transform: scale(0.98);
+      }
+
+      .primary-button {
+        background-color: #ff0000;
+        color: white;
+        flex: 2;
+      }
+
+      .primary-button:hover {
+        background-color: #d60000;
+      }
+
+      .secondary-button {
+        background-color: #e0e0e0;
+        color: #333;
+        flex: 1;
+      }
+
+      .secondary-button:hover {
+        background-color: #d0d0d0;
+      }
+
+      .copy-button {
+        display: none;
+      }
+
+      /* Output Styles */
+      .output-section {
+        margin-top: 30px;
+      }
+
+      .summary-container {
+        border: 2px solid #eee;
+        border-radius: 6px;
+        padding: 20px;
+        min-height: 200px;
+        background-color: #f9f9f9;
+        display: none;
+        white-space: pre-wrap;
+      }
+
+      /* Loading Indicator */
+      .loader {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .loader-dots {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 20px;
+      }
+
+      .loader-dots div {
+        position: absolute;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ff0000;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
+
+      .loader-dots div:nth-child(1) {
+        left: 8px;
+        animation: loader-dots1 0.6s infinite;
+      }
+
+      .loader-dots div:nth-child(2) {
+        left: 8px;
+        animation: loader-dots2 0.6s infinite;
+      }
+
+      .loader-dots div:nth-child(3) {
+        left: 32px;
+        animation: loader-dots2 0.6s infinite;
+      }
+
+      .loader-dots div:nth-child(4) {
+        left: 56px;
+        animation: loader-dots3 0.6s infinite;
+      }
+
+      @keyframes loader-dots1 {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes loader-dots3 {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0);
+        }
+      }
+
+      @keyframes loader-dots2 {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(24px, 0);
+        }
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
         }
 
-        @media (max-width: 600px) {
-            .button-group {
-                flex-direction: column;
-            }
+        h1 {
+          font-size: 1.8rem;
         }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .primary-button {
-            background-color: #ff0000;
-            color: white;
-            flex: 2;
-        }
-
-        .primary-button:hover {
-            background-color: #d60000;
-        }
-
-        .secondary-button {
-            background-color: #e0e0e0;
-            color: #333;
-            flex: 1;
-        }
-
-        .secondary-button:hover {
-            background-color: #d0d0d0;
-        }
-
-        .copy-button {
-            display: none;
-        }
-
-        /* Output Styles */
-        .output-section {
-            margin-top: 30px;
-        }
-
-        .summary-container {
-            border: 2px solid #eee;
-            border-radius: 6px;
-            padding: 20px;
-            min-height: 200px;
-            background-color: #f9f9f9;
-            display: none;
-            white-space: pre-wrap;
-        }
-
-        /* Loading Indicator */
-        .loader {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .loader-dots {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 20px;
-        }
-
-        .loader-dots div {
-            position: absolute;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #ff0000;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-
-        .loader-dots div:nth-child(1) {
-            left: 8px;
-            animation: loader-dots1 0.6s infinite;
-        }
-
-        .loader-dots div:nth-child(2) {
-            left: 8px;
-            animation: loader-dots2 0.6s infinite;
-        }
-
-        .loader-dots div:nth-child(3) {
-            left: 32px;
-            animation: loader-dots2 0.6s infinite;
-        }
-
-        .loader-dots div:nth-child(4) {
-            left: 56px;
-            animation: loader-dots3 0.6s infinite;
-        }
-
-        @keyframes loader-dots1 {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes loader-dots3 {
-            0% { transform: scale(1); }
-            100% { transform: scale(0); }
-        }
-
-        @keyframes loader-dots2 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(24px, 0); }
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <div class="logo">📹➡️📝</div>
-            <h1>YouTube Video Summarizer</h1>
-            <p class="description">Enter a YouTube video link to get an AI-generated summary</p>
-        </header>
+      <header>
+        <div class="logo">📹➡️📝</div>
+        <h1>YouTube Video Summarizer</h1>
+        <p class="description">
+          Enter a YouTube video link to get an AI-generated summary
+        </p>
+      </header>
 
-        <main>
-            <div class="input-group">
-                <label for="video-url">YouTube Video URL</label>
-                <input type="text" id="video-url" placeholder="https://www.youtube.com/watch?v=...">
-                <p class="error-message" id="url-error">Please enter a valid YouTube URL</p>
-            </div>
+      <main>
+        <div class="input-group">
+          <label for="video-url">YouTube Video URL</label>
+          <input
+            type="text"
+            id="video-url"
+            placeholder="https://www.youtube.com/watch?v=..."
+          />
+          <p class="error-message" id="url-error">
+            Please enter a valid YouTube URL
+          </p>
+        </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="long-summary">
-                <label for="long-summary">Generate detailed summary</label>
-                
-                <div class="api-key-container">
-                    <label for="api-key">API Key:</label>
-                    <input type="text" id="api-key" placeholder="Enter your API key">
-                </div>
-            </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="long-summary" />
+          <label for="long-summary">Generate detailed summary</label>
 
-            <div class="button-group">
-                <button class="primary-button" id="summarize-btn">Summarize Video</button>
-                <button class="secondary-button copy-button" id="copy-btn">Copy Summary</button>
-            </div>
+          <div class="api-key-container">
+            <label for="api-key">API Key:</label>
+            <input type="text" id="api-key" placeholder="Enter your API key" />
+          </div>
+        </div>
 
-            <div class="loader" id="loader">
-                <div class="loader-dots"><div></div><div></div><div></div><div></div></div>
-                <p>Generating summary...</p>
-            </div>
+        <div class="button-group">
+          <button class="primary-button" id="summarize-btn">
+            Summarize Video
+          </button>
+          <button class="secondary-button copy-button" id="copy-btn">
+            Copy Summary
+          </button>
+        </div>
 
-            <div class="output-section">
-                <div class="summary-container" id="summary-output"></div>
-            </div>
-        </main>
+        <div class="loader" id="loader">
+          <div class="loader-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <p>Generating summary...</p>
+        </div>
+
+        <div class="output-section">
+          <div class="summary-container" id="summary-output"></div>
+        </div>
+      </main>
     </div>
 
     <script>
-        // DOM Elements
-        const videoUrlInput = document.getElementById('video-url');
-        const longSummaryCheckbox = document.getElementById('long-summary');
-        const summarizeButton = document.getElementById('summarize-btn');
-        const copyButton = document.getElementById('copy-btn');
-        const urlError = document.getElementById('url-error');
-        const loader = document.getElementById('loader');
-        const summaryOutput = document.getElementById('summary-output');
-        const apiKeyInput = document.getElementById('api-key');
+      // DOM Elements
+      const videoUrlInput = document.getElementById("video-url");
+      const longSummaryCheckbox = document.getElementById("long-summary");
+      const summarizeButton = document.getElementById("summarize-btn");
+      const copyButton = document.getElementById("copy-btn");
+      const urlError = document.getElementById("url-error");
+      const loader = document.getElementById("loader");
+      const summaryOutput = document.getElementById("summary-output");
+      const apiKeyInput = document.getElementById("api-key");
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // URL validation on input
-            videoUrlInput.addEventListener('input', validateYouTubeUrl);
-            
-            // Summarize button click handler
-            summarizeButton.addEventListener('click', summarizeVideo);
-            
-            // Copy button click handler
-            copyButton.addEventListener('click', copySummaryToClipboard);
-        });
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", () => {
+        // URL validation on input
+        videoUrlInput.addEventListener("input", validateYouTubeUrl);
 
-        /**
-         * Validates if the input is a YouTube URL
-         * Shows/hides error message accordingly
-         */
-        function validateYouTubeUrl() {
-            const url = videoUrlInput.value.trim();
-            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(\S*)?$/;
-            
-            const isValid = youtubeRegex.test(url);
-            
-            if (url === '') {
-                urlError.style.display = 'none';
-                return false;
-            }
-            
-            if (!isValid) {
-                urlError.style.display = 'block';
-                return false;
-            } else {
-                urlError.style.display = 'none';
-                return true;
-            }
+        // Summarize button click handler
+        summarizeButton.addEventListener("click", summarizeVideo);
+
+        // Copy button click handler
+        copyButton.addEventListener("click", copySummaryToClipboard);
+      });
+
+      /**
+       * Validates if the input is a YouTube URL
+       * Shows/hides error message accordingly
+       */
+      function validateYouTubeUrl() {
+        const url = videoUrlInput.value.trim();
+        const youtubeRegex =
+          /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(\S*)?$/;
+
+        const isValid = youtubeRegex.test(url);
+
+        if (url === "") {
+          urlError.style.display = "none";
+          return false;
         }
 
-        /**
-         * Handles the summarization process
-         * - Validates URL
-         * - Shows loading state
-         * - Makes API request
-         * - Updates UI with result
-         */
-        function summarizeVideo() {
-            // Validate URL first
-            if (!validateYouTubeUrl()) {
-                if (videoUrlInput.value.trim() === '') {
-                    urlError.textContent = 'Please enter a YouTube URL';
-                    urlError.style.display = 'block';
-                }
-                videoUrlInput.focus();
-                return;
-            }
+        if (!isValid) {
+          urlError.style.display = "block";
+          return false;
+        } else {
+          urlError.style.display = "none";
+          return true;
+        }
+      }
 
-            const apiKey = apiKeyInput.value.trim();
-            if (!apiKey) {
-                // Show error for API key
-                displayError("Please enter an API key");
-                apiKeyInput.focus();
-                return;
-            }
-
-            // Show loading state
-            loader.style.display = 'block';
-            summaryOutput.style.display = 'none';
-            copyButton.style.display = 'none';
-            
-            // Get input values
-            const videoUrl = encodeURIComponent(videoUrlInput.value.trim());
-            const isLongSummary = longSummaryCheckbox.checked;
-            
-            // Construct API URL (replace with your actual API endpoint)
-            let apiUrl = `https://ytsum.baldierot.workers.dev/?url=${videoUrl}&key=${apiKey}`;
-            if (isLongSummary) {
-                apiUrl += '&long=true';
-            }
-            
-            // For demo purposes, simulate API call with a timeout
-            // In a real application, replace this with actual fetch request
-            simulateApiCall(apiUrl);
+      /**
+       * Handles the summarization process
+       * - Validates URL
+       * - Shows loading state
+       * - Makes API request
+       * - Updates UI with result
+       */
+      function summarizeVideo() {
+        // Validate URL first
+        if (!validateYouTubeUrl()) {
+          if (videoUrlInput.value.trim() === "") {
+            urlError.textContent = "Please enter a YouTube URL";
+            urlError.style.display = "block";
+          }
+          videoUrlInput.focus();
+          return;
         }
 
-        /**
-         * Simulates an API call (for demo purposes)
-         * In a real application, replace with an actual fetch request
-         * @param {string} apiUrl - The API URL to call
-         */
-        function simulateApiCall(apiUrl) {
-            console.log(`Making API request to: ${apiUrl}`);
-            
-            // Simulate network delay
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+          // Show error for API key
+          displayError("Please enter an API key");
+          apiKeyInput.focus();
+          return;
+        }
+
+        // Show loading state
+        loader.style.display = "block";
+        summaryOutput.style.display = "none";
+        copyButton.style.display = "none";
+
+        // Get input values
+        const videoUrl = encodeURIComponent(videoUrlInput.value.trim());
+        const isLongSummary = longSummaryCheckbox.checked;
+
+        // Construct API URL (replace with your actual API endpoint)
+        let apiUrl = `https://ytsum.baldierot.workers.dev/?url=${videoUrl}&key=${apiKey}`;
+        if (isLongSummary) {
+          apiUrl += "&long=true";
+        }
+
+        // For demo purposes, simulate API call with a timeout
+        // In a real application, replace this with actual fetch request
+        simulateApiCall(apiUrl);
+
+        fetch(apiUrl)
+          .then(response => {
+            if (!response.ok) {
+              // Handle HTTP error status codes
+              if (response.status === 400) {
+                throw new Error("Bad request: Please check your YouTube URL and API key");
+              } else if (response.status === 401 || response.status === 403) {
+                throw new Error("Authentication error: Invalid API key");
+              } else if (response.status === 404) {
+                throw new Error("Video not found: The requested video could not be found");
+              } else if (response.status >= 500) {
+                throw new Error("Server error: Our service is experiencing issues. Please try again later");
+              } else {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+              }
+            }
+            return response.text();
+          })
+          .then(data => {
+            displaySummary(data);
+          })
+          .catch(error => {
+            displayError(error.message || "Failed to get summary. Please try again.");
+          });
+      }
+
+      /**
+       * Simulates an API call (for demo purposes)
+       * In a real application, replace with an actual fetch request
+       * @param {string} apiUrl - The API URL to call
+       */
+      function simulateApiCall(apiUrl) {
+        console.log(`Making API request to: ${apiUrl}`);
+
+        // Simulate network delay
+        setTimeout(() => {
+          // For demo, simulate a successful response
+          const simulatedSummary =
+            "This is a simulated summary of the YouTube video. In a real application, this would be replaced with the actual summary returned from your API. The summary would contain key points from the video, main topics discussed, and important takeaways based on the video content.\n\nThe summarization process typically involves analyzing the video transcript, identifying important sections, and condensing the information into a concise format that retains the essential meaning.\n\nThis is just a placeholder to demonstrate the UI functionality.";
+          displaySummary(simulatedSummary);
+        }, 2000);
+      }
+
+      /**
+       * Displays the summary in the output container
+       * @param {string} summary - The summary text to display
+       */
+      function displaySummary(summary) {
+        // Hide loader
+        loader.style.display = "none";
+
+        // Update and show summary container
+        summaryOutput.textContent = summary;
+        summaryOutput.style.display = "block";
+
+        // Show copy button
+        copyButton.style.display = "block";
+      }
+
+      /**
+       * Displays an error message in the summary container
+       * @param {string} message - The error message to display
+       */
+      function displayError(message) {
+        loader.style.display = "none";
+        summaryOutput.textContent = message;
+        summaryOutput.style.display = "block";
+        summaryOutput.style.color = "#ff0000";
+      }
+
+      /**
+       * Copies the summary text to clipboard
+       */
+      function copySummaryToClipboard() {
+        const summaryText = summaryOutput.textContent;
+
+        if (!summaryText) return;
+
+        navigator.clipboard
+          .writeText(summaryText)
+          .then(() => {
+            // Temporarily change button text to indicate success
+            const originalText = copyButton.textContent;
+            copyButton.textContent = "Copied!";
+
             setTimeout(() => {
-                // This is where you would make the actual API call in a production app
-                // fetch(apiUrl)
-                //   .then(response => response.json())
-                //   .then(data => {
-                //     displaySummary(data.summary);
-                //   })
-                //   .catch(error => {
-                //     displayError("Failed to get summary. Please try again.");
-                //   });
-                
-                // For demo, simulate a successful response
-                const simulatedSummary = "This is a simulated summary of the YouTube video. In a real application, this would be replaced with the actual summary returned from your API. The summary would contain key points from the video, main topics discussed, and important takeaways based on the video content.\n\nThe summarization process typically involves analyzing the video transcript, identifying important sections, and condensing the information into a concise format that retains the essential meaning.\n\nThis is just a placeholder to demonstrate the UI functionality.";
-                displaySummary(simulatedSummary);
+              copyButton.textContent = originalText;
             }, 2000);
-        }
-
-        /**
-         * Displays the summary in the output container
-         * @param {string} summary - The summary text to display
-         */
-        function displaySummary(summary) {
-            // Hide loader
-            loader.style.display = 'none';
-            
-            // Update and show summary container
-            summaryOutput.textContent = summary;
-            summaryOutput.style.display = 'block';
-            
-            // Show copy button
-            copyButton.style.display = 'block';
-        }
-
-        /**
-         * Displays an error message in the summary container
-         * @param {string} message - The error message to display
-         */
-        function displayError(message) {
-            loader.style.display = 'none';
-            summaryOutput.textContent = message;
-            summaryOutput.style.display = 'block';
-            summaryOutput.style.color = '#ff0000';
-        }
-
-        /**
-         * Copies the summary text to clipboard
-         */
-        function copySummaryToClipboard() {
-            const summaryText = summaryOutput.textContent;
-            
-            if (!summaryText) return;
-            
-            navigator.clipboard.writeText(summaryText)
-                .then(() => {
-                    // Temporarily change button text to indicate success
-                    const originalText = copyButton.textContent;
-                    copyButton.textContent = 'Copied!';
-                    
-                    setTimeout(() => {
-                        copyButton.textContent = originalText;
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
-        }
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err);
+          });
+      }
     </script>
-</body>
+  </body>
 </html>
