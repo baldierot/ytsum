@@ -63,7 +63,8 @@
       }
 
       input[type="text"],
-      input[type="password"] { /* Combined styles */
+      input[type="password"] {
+        /* Combined styles */
         width: 100%;
         padding: 12px;
         border: 2px solid #ddd;
@@ -73,7 +74,8 @@
       }
 
       input[type="text"]:focus,
-      input[type="password"]:focus { /* Combined styles */
+      input[type="password"]:focus {
+        /* Combined styles */
         outline: none;
         border-color: #ff0000;
       }
@@ -110,10 +112,10 @@
       }
 
       .api-key-container input {
-        width: 200px; 
+        width: 200px;
         padding: 8px 12px;
         flex-grow: 0;
-        flex-shrink: 0; 
+        flex-shrink: 0;
       }
 
       .checkbox-with-label {
@@ -145,7 +147,7 @@
         }
 
         .api-key-container label {
-            flex-shrink: 0;
+          flex-shrink: 0;
         }
 
         .api-key-container input {
@@ -178,13 +180,15 @@
         transition: background-color 0.3s, transform 0.2s;
       }
 
-      button:disabled { /* Style for disabled button */
-          background-color: #ccc;
-          cursor: not-allowed;
-          transform: none;
+      button:disabled {
+        /* Style for disabled button */
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
       }
 
-      button:active:not(:disabled) { /* Only apply active scale if not disabled */
+      button:active:not(:disabled) {
+        /* Only apply active scale if not disabled */
         transform: scale(0.98);
       }
 
@@ -338,21 +342,20 @@
         background-color: #f0f0f0;
       }
 
-       /* Specific style for the "No history" message */
+      /* Specific style for the "No history" message */
       #history-list li.no-history {
-          font-style: italic;
-          color: #888;
-          cursor: default;
-          padding-left: 15px; /* Reset padding */
-          text-align: center;
+        font-style: italic;
+        color: #888;
+        cursor: default;
+        padding-left: 15px; /* Reset padding */
+        text-align: center;
       }
-       #history-list li.no-history:hover {
-          background-color: transparent; /* No hover effect */
-       }
+      #history-list li.no-history:hover {
+        background-color: transparent; /* No hover effect */
+      }
       #history-list li.no-history::before {
-          content: none; /* No [S]/[L] indicator */
+        content: none; /* No [S]/[L] indicator */
       }
-
 
       .history-item-short::before,
       .history-item-long::before {
@@ -366,12 +369,12 @@
       }
 
       .history-item-short::before {
-        content: '[S]';
+        content: "[S]";
         color: #007bff; /* Blue for short */
       }
 
       .history-item-long::before {
-        content: '[L]';
+        content: "[L]";
         color: #dc3545; /* Red for long */
       }
       /* --- End History Styles --- */
@@ -449,14 +452,14 @@
           <!-- <label>Summary:</label>-->
           <div class="summary-container" id="summary-output"></div>
         </div>
-        
-        <div class="history-section" style="margin-top: 30px;">
+
+        <div class="history-section" style="margin-top: 30px">
           <label>History:</label>
           <ul id="history-list">
-            <li class="no-history">Loading history...</li> <!-- Placeholder -->
+            <li class="no-history">Loading history...</li>
+            <!-- Placeholder -->
           </ul>
         </div>
-
       </main>
     </div>
 
@@ -499,9 +502,9 @@
        */
       function saveHistory(history) {
         try {
-            if (!Array.isArray(history)) {
-                throw new Error("Attempted to save non-array data as history.");
-            }
+          if (!Array.isArray(history)) {
+            throw new Error("Attempted to save non-array data as history.");
+          }
           localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
         } catch (e) {
           console.error("Error saving history to localStorage:", e);
@@ -522,9 +525,13 @@
         );
 
         // Basic validation
-        if (!url || !type || typeof summary !== 'string') {
-            console.error("Invalid data attempted to be added to history:", { url, type, summary });
-            return;
+        if (!url || !type || typeof summary !== "string") {
+          console.error("Invalid data attempted to be added to history:", {
+            url,
+            type,
+            summary,
+          });
+          return;
         }
 
         const newEntry = { url, type, summary, timestamp: Date.now() };
@@ -555,29 +562,42 @@
         historyList.innerHTML = ""; // Clear existing list items
 
         if (history.length === 0) {
-            const li = document.createElement("li");
-            li.textContent = "No history yet.";
-            li.classList.add("no-history"); // Add class for styling
-            historyList.appendChild(li);
-            return;
+          const li = document.createElement("li");
+          li.textContent = "No history yet.";
+          li.classList.add("no-history"); // Add class for styling
+          historyList.appendChild(li);
+          return;
         }
 
         history.forEach((item, index) => {
           // Basic check for valid item structure
-          if (!item || !item.url || !item.type || typeof item.summary !== 'string') {
-              console.warn("Skipping invalid history item:", item);
-              return; // Skip rendering this item
+          if (
+            !item ||
+            !item.url ||
+            !item.type ||
+            typeof item.summary !== "string"
+          ) {
+            console.warn("Skipping invalid history item:", item);
+            return; // Skip rendering this item
           }
 
           const li = document.createElement("li");
           // Use first line or a placeholder; trim whitespace
-          const firstLine = (item.summary.split('\n')[0] || "[Empty Summary]").trim();
+          const firstLine = (
+            item.summary.split("\n")[0] || "[Empty Summary]"
+          ).trim();
           li.textContent = firstLine;
           // Tooltip shows more info, including URL and type
-          li.title = `URL: ${item.url}\nType: ${item.type}\n\n${item.summary.substring(0, 200)}${item.summary.length > 200 ? '...' : ''}`;
+          li.title = `URL: ${item.url}\nType: ${
+            item.type
+          }\n\n${item.summary.substring(0, 200)}${
+            item.summary.length > 200 ? "..." : ""
+          }`;
 
           // Add class for styling and type indication ([S] or [L])
-          li.classList.add(item.type === 'long' ? 'history-item-long' : 'history-item-short');
+          li.classList.add(
+            item.type === "long" ? "history-item-long" : "history-item-short"
+          );
 
           li.dataset.index = index; // Store current index to retrieve data on click
 
@@ -598,34 +618,37 @@
         let history = getHistory(); // Get fresh history
         // Find the item in the current history array based on url and type
         const index = history.findIndex(
-            item => item.url === selectedItem.url && item.type === selectedItem.type
+          (item) =>
+            item.url === selectedItem.url && item.type === selectedItem.type
         );
 
         if (index === -1) {
-            console.warn("Selected history item not found in current history array.");
-            // Maybe just load the data without reordering if not found?
-            videoUrlInput.value = selectedItem.url;
-            longSummaryCheckbox.checked = selectedItem.type === 'long';
-            displaySummary(selectedItem.summary);
-            validateYouTubeUrl();
-            return;
-         }
+          console.warn(
+            "Selected history item not found in current history array."
+          );
+          // Maybe just load the data without reordering if not found?
+          videoUrlInput.value = selectedItem.url;
+          longSummaryCheckbox.checked = selectedItem.type === "long";
+          displaySummary(selectedItem.summary);
+          validateYouTubeUrl();
+          return;
+        }
 
         const item = history[index]; // Get the item from the current array
 
         // Update UI elements
         videoUrlInput.value = item.url;
-        longSummaryCheckbox.checked = item.type === 'long';
+        longSummaryCheckbox.checked = item.type === "long";
         displaySummary(item.summary);
-        urlError.style.display = 'none'; // Hide URL error if loading valid history item
+        urlError.style.display = "none"; // Hide URL error if loading valid history item
         validateYouTubeUrl(); // Update URL validation state visually if needed
 
         // Move the accessed item to the top *only if it's not already there*
         if (index > 0) {
-            history.splice(index, 1); // Remove from current position
-            history.unshift(item);    // Add to beginning
-            saveHistory(history);     // Save the new order
-            populateHistoryList();    // Refresh the list UI to reflect the new order
+          history.splice(index, 1); // Remove from current position
+          history.unshift(item); // Add to beginning
+          saveHistory(history); // Save the new order
+          populateHistoryList(); // Refresh the list UI to reflect the new order
         }
       }
 
@@ -643,31 +666,33 @@
         summarizeButton.addEventListener("click", handleSummarizeClick); // Use handler function
         copyButton.addEventListener("click", copySummaryToClipboard);
 
-
         // --- Load initial state ---
         apiKeyInput.value = localStorage.getItem("apiKey") ?? "";
 
         const history = getHistory();
         if (history.length > 0) {
-            // Load the most recent history item (index 0)
-            const lastUsed = history[0];
-            if (lastUsed && lastUsed.url && typeof lastUsed.summary === 'string') {
-                 videoUrlInput.value = lastUsed.url;
-                 longSummaryCheckbox.checked = lastUsed.type === 'long';
-                 displaySummary(lastUsed.summary);
-            } else {
-                // Handle case where the first history item is invalid
-                displaySummary(""); // Show empty summary
-            }
+          // Load the most recent history item (index 0)
+          const lastUsed = history[0];
+          if (
+            lastUsed &&
+            lastUsed.url &&
+            typeof lastUsed.summary === "string"
+          ) {
+            videoUrlInput.value = lastUsed.url;
+            longSummaryCheckbox.checked = lastUsed.type === "long";
+            displaySummary(lastUsed.summary);
+          } else {
+            // Handle case where the first history item is invalid
+            displaySummary(""); // Show empty summary
+          }
         } else {
-            // No history, ensure summary area is clear
-             displaySummary("");
+          // No history, ensure summary area is clear
+          displaySummary("");
         }
 
         validateYouTubeUrl(); // Validate initial URL if any
         populateHistoryList(); // Populate history list on load
       });
-
 
       function validateYouTubeUrl() {
         const url = videoUrlInput.value.trim();
@@ -696,7 +721,7 @@
        * Handles the click event for the Summarize button.
        * Checks input validity and history before fetching.
        */
-       function handleSummarizeClick() {
+      function handleSummarizeClick() {
         // 1. Validate URL
         if (!validateYouTubeUrl()) {
           videoUrlInput.focus();
@@ -718,23 +743,24 @@
 
         const videoUrl = videoUrlInput.value.trim();
         const isLongSummary = longSummaryCheckbox.checked;
-        const summaryType = isLongSummary ? 'long' : 'short';
+        const summaryType = isLongSummary ? "long" : "short";
 
         // 3. Check History Before Fetching
         const history = getHistory();
-        const historyItem = history.find( // Use find to get the item directly
-            (item) => item.url === videoUrl && item.type === summaryType
+        const historyItem = history.find(
+          // Use find to get the item directly
+          (item) => item.url === videoUrl && item.type === summaryType
         );
 
         if (historyItem) {
-            console.log("Loading summary from history...");
-            loadFromHistory(historyItem); // Load existing, update UI, move to top
-            return; // Stop execution, don't fetch
+          console.log("Loading summary from history...");
+          loadFromHistory(historyItem); // Load existing, update UI, move to top
+          return; // Stop execution, don't fetch
         }
 
         // 4. Proceed with fetching if not found in history
         fetchSummary(videoUrl, summaryType, apiKey);
-       }
+      }
 
       /**
        * Fetches the summary from the API.
@@ -747,68 +773,89 @@
         summaryOutput.style.display = "none"; // Hide previous summary/error
         copyButton.style.display = "none";
         summarizeButton.disabled = true; // Disable button during fetch
-        urlError.style.display = 'none'; // Hide URL error during fetch
+        urlError.style.display = "none"; // Hide URL error during fetch
 
         const encodedUrl = encodeURIComponent(url);
         let apiUrl = `https://ytsum.baldierot.workers.dev/?url=${encodedUrl}&key=${apiKey}`;
-        if (type === 'long') {
+        if (type === "long") {
           apiUrl += "&long=true";
         }
 
-        console.log(`Fetching ${type} summary from API for: ${url}`);
         fetch(apiUrl)
-          .then(async (response) => { // Use async to handle await response.text()
-            const responseText = await response.text(); // Get text regardless of status
-            if (!response.ok) {
-                // Try to parse error message from response body if available
-                let serverMessage = "";
-                try {
-                    const errorData = JSON.parse(responseText);
-                    if (errorData && errorData.error) {
-                       serverMessage = ` Server message: ${errorData.error}`;
-                    }
-                } catch(e) { /* Ignore if body is not JSON or empty */ }
+          .then(async (response) => {
+            const responseText = await response.text();
 
-                let specificError = `Error ${response.status}: ${response.statusText}.`;
-                if (response.status === 400) {
-                    specificError = "Bad request (400): Please check the YouTube URL format.";
-                } else if (response.status === 401 || response.status === 403) {
-                    specificError = "Authentication error (401/403): Invalid API key.";
-                } else if (response.status === 404) {
-                    specificError = "Not Found (404): The video might be private, deleted, or transcript unavailable.";
-                } else if (response.status === 429) {
-                    specificError = "Rate Limit Exceeded (429): Please wait and try again later.";
-                } else if (response.status >= 500) {
-                    specificError = "Server Error (5xx): The summarization service is unavailable. Please try again later.";
+            if (!response.ok) {
+              let serverMessage = "";
+              try {
+                const errorData = JSON.parse(responseText);
+                if (errorData && errorData.error) {
+                  serverMessage = `Server Message: ${errorData.error}`;
+                  if (errorData.details) {
+                    serverMessage += ` Details: ${
+                      typeof errorData.details === "string"
+                        ? errorData.details
+                        : JSON.stringify(errorData.details)
+                    }`;
+                  }
+                } else {
+                  serverMessage = `Raw Server Response: ${responseText}`;
                 }
-                throw new Error(specificError + serverMessage);
+              } catch (e) {
+                console.warn(
+                  "Response body was not valid JSON, using raw text for error details."
+                );
+                serverMessage = responseText
+                  ? `Raw Server Response: ${responseText}`
+                  : "Server returned an empty error response.";
+              }
+
+              let specificError = `Error ${response.status} (${response.statusText}).`;
+              if (response.status === 400) {
+                specificError =
+                  "Bad Request (400): Please check the YouTube URL format or other parameters.";
+              } else if (response.status === 401 || response.status === 403) {
+                specificError =
+                  "Authentication Error (401/403): Invalid API key provided.";
+              } else if (response.status === 404) {
+                specificError =
+                  "Not Found (404): The video might be private, deleted, or a transcript is unavailable.";
+              } else if (response.status === 429) {
+                specificError =
+                  "Rate Limit Exceeded (429): Too many requests. Please wait and try again later.";
+              } else if (response.status >= 500) {
+                specificError = `Server Error (${response.status}): The summarization service encountered an issue. Please try again later.`;
+              }
+
+              throw new Error(`${specificError} ${serverMessage}`);
             }
-            return responseText; // Return successful response text
+
+            if (!responseText) {
+              throw new Error(
+                "Received an empty but successful response from the service."
+              );
+            }
+            return responseText;
           })
-          .then((data) => {
-            if (!data) {
-                // Handle cases where API returns success but empty body
-                throw new Error("Received an empty summary from the service.");
-            }
-            displaySummary(data);
-            // --- Save to History on Success ---
-            addToHistory(url, type, data);
-            // Clean up old individual keys if they exist (optional, good practice)
+          .then((summaryText) => {
+            displaySummary(summaryText);
+            addToHistory(url, type, summaryText);
             localStorage.removeItem("url");
             localStorage.removeItem("long");
             localStorage.removeItem("summary");
           })
           .catch((error) => {
-            console.error("Fetch or processing error:", error);
-            // Display the specific error message caught
-            displayError(error.message || "An unknown error occurred. Failed to get summary.");
+            console.error("Fetch Operation Failed:", error);
+            displayError(
+              error.message ||
+                "An unknown error occurred while fetching the summary."
+            );
           })
           .finally(() => {
-             loader.style.display = "none"; // Ensure loader hides
-             summarizeButton.disabled = false; // Re-enable button
+            loader.style.display = "none";
+            summarizeButton.disabled = false;
           });
       }
-
 
       function displaySummary(summary) {
         loader.style.display = "none"; // Ensure loader is hidden
@@ -820,7 +867,7 @@
         summaryOutput.style.display = hasContent ? "block" : "none";
         copyButton.style.display = hasContent ? "inline-block" : "none"; // Use inline-block for button layout
         // Ensure output section container is visible if there's content
-        document.querySelector('.output-section').style.display = 'block';
+        document.querySelector(".output-section").style.display = "block";
       }
 
       function displayError(message) {
@@ -829,16 +876,19 @@
         summaryOutput.style.display = "block";
         summaryOutput.style.color = "#dc3545"; // Use a standard error red color
         copyButton.style.display = "none"; // Hide copy button on error
-        document.querySelector('.output-section').style.display = 'block'; // Ensure section is visible
+        document.querySelector(".output-section").style.display = "block"; // Ensure section is visible
       }
 
       function copySummaryToClipboard() {
         const summaryText = summaryOutput.textContent;
-        const isErrorMessage = summaryOutput.style.color === 'rgb(220, 53, 69)'; // Check computed style for error color
+        const isErrorMessage = summaryOutput.style.color === "rgb(220, 53, 69)"; // Check computed style for error color
 
-        if (!summaryText || isErrorMessage) { // Don't copy empty content or error messages
-             console.log("Copy prevented: No valid summary content or it's an error message.");
-             return;
+        if (!summaryText || isErrorMessage) {
+          // Don't copy empty content or error messages
+          console.log(
+            "Copy prevented: No valid summary content or it's an error message."
+          );
+          return;
         }
 
         navigator.clipboard
@@ -854,31 +904,35 @@
             }, 2000);
           })
           .catch((err) => {
-            console.error("Failed to copy text using navigator.clipboard: ", err);
+            console.error(
+              "Failed to copy text using navigator.clipboard: ",
+              err
+            );
             // Fallback for older browsers or insecure contexts (less common now)
             try {
-                const textArea = document.createElement("textarea");
-                textArea.value = summaryText;
-                textArea.style.position = "fixed"; // Prevent scrolling to bottom
-                textArea.style.opacity = "0";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+              const textArea = document.createElement("textarea");
+              textArea.value = summaryText;
+              textArea.style.position = "fixed"; // Prevent scrolling to bottom
+              textArea.style.opacity = "0";
+              document.body.appendChild(textArea);
+              textArea.focus();
+              textArea.select();
+              document.execCommand("copy");
+              document.body.removeChild(textArea);
 
-                // Visual feedback for fallback
-                const originalText = copyButton.textContent;
-                copyButton.textContent = "Copied! (Fallback)";
-                copyButton.disabled = true;
-                 setTimeout(() => {
-                    copyButton.textContent = originalText;
-                    copyButton.disabled = false;
-                }, 2500);
-
+              // Visual feedback for fallback
+              const originalText = copyButton.textContent;
+              copyButton.textContent = "Copied! (Fallback)";
+              copyButton.disabled = true;
+              setTimeout(() => {
+                copyButton.textContent = originalText;
+                copyButton.disabled = false;
+              }, 2500);
             } catch (fallbackErr) {
-                console.error("Fallback copy method failed:", fallbackErr);
-                alert("Failed to copy summary to clipboard. Please copy it manually.");
+              console.error("Fallback copy method failed:", fallbackErr);
+              alert(
+                "Failed to copy summary to clipboard. Please copy it manually."
+              );
             }
           });
       }
